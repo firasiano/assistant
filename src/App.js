@@ -3,12 +3,38 @@ import logo from './logo.svg';
 import './App.css';
 import 'react-mdl/extra/material.css';
 import 'react-mdl/extra/material.js';
+import {ApiAiClient, ApiAiStreamClient} from "api-ai-javascript";
 
 class App extends Component {
   alertMe() {
     alert('hi');
   }
+  initAIClient() {
+
+    const client = new ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0', streamClientClass: ApiAiStreamClient});
+client
+
+.textRequest('5 stars hotel in Chicago!')
+    .then((response) => {/* do something */})
+    .catch((error) => {/* do something here too */})
+
+    // const client = new ApiAi.ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0'});
+    // let promise = client.textRequest('5 stars hotel in Chicago');
+
+    // promise
+    //     .then(handleResponse)
+    //     .catch(heandleError);
+
+    // function handleResponse(serverResponse) {
+    //         console.log(serverResponse);
+    // }
+    // function heandleError(serverError) {
+    //         console.log(serverError);
+    // }
+
+  }
   render() {
+    this.initAIClient();
     return (
       <div>
       
