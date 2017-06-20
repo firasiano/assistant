@@ -14,7 +14,13 @@ class App extends Component {
     e.preventDefault();
     this.state.client
       .textRequest(document.getElementById('help').value)
-      .then((response) => {console.log(response)})
+      .then((response) => {
+        switch(response.result.action){
+          case 'fiveStarsHotelsChicago': 
+          document.getElementById('expediaForm').src = 'https://www.expedia.com/Hotel-Search?_xpid=11905%7C1#destination=Chicago+(and+vicinity),+Illinois,+United+States+of+America&startDate=07/11/2017&endDate=07/14/2017&adults=1&regionId=178248&star=50&sort=recommended';
+          break;
+        }
+      })
       .catch((error) => {console.log(error)});
   }
 
@@ -25,7 +31,7 @@ class App extends Component {
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
       <script defer src="https://code.getmdl.io/1.3.0/material.min.js" />
-        <iframe className="main-website" src="https://www.expedia.com">
+        <iframe id="expediaForm" className="main-website" src="https://www.expedia.com">
           <p>Your browser does not support iframes.</p>
         </iframe>
 
