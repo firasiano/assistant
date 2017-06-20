@@ -3,38 +3,22 @@ import logo from './logo.svg';
 import './App.css';
 import 'react-mdl/extra/material.css';
 import 'react-mdl/extra/material.js';
-import {ApiAiClient, ApiAiStreamClient} from "api-ai-javascript";
+import {ApiAiClient} from "api-ai-javascript/ApiAiClient"
 
 class App extends Component {
-  alertMe() {
-    alert('hi');
+  constructor(props) {
+    super(props);
+    this.state = {client: new ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0'})};
   }
-  initAIClient() {
-
-    const client = new ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0', streamClientClass: ApiAiStreamClient});
-client
-
-.textRequest('5 stars hotel in Chicago!')
-    .then((response) => {/* do something */})
-    .catch((error) => {/* do something here too */})
-
-    // const client = new ApiAi.ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0'});
-    // let promise = client.textRequest('5 stars hotel in Chicago');
-
-    // promise
-    //     .then(handleResponse)
-    //     .catch(heandleError);
-
-    // function handleResponse(serverResponse) {
-    //         console.log(serverResponse);
-    // }
-    // function heandleError(serverError) {
-    //         console.log(serverError);
-    // }
-
+  handleAICommand(e) {
+    e.preventDefault();
+    this.state.client
+      .textRequest(document.getElementById('help').value)
+      .then((response) => {console.log(response)})
+      .catch((error) => {console.log(error)});
   }
+
   render() {
-    this.initAIClient();
     return (
       <div>
       
@@ -45,7 +29,7 @@ client
           <p>Your browser does not support iframes.</p>
         </iframe>
 
-        <form className="ai-assistant" onSubmit={this.alertMe}>
+        <form className="ai-assistant" onSubmit={this.handleAICommand.bind(this)}>
           <div className="mdl-textfield mdl-js-textfield">
             <input className="mdl-textfield__input" type="text" id="help" />
             <label className="mdl-textfield__label" htmlFor="help">How can I help...</label>
