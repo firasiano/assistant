@@ -3,12 +3,19 @@ import logo from './logo.svg';
 import './App.css';
 import 'react-mdl/extra/material.css';
 import 'react-mdl/extra/material.js';
-import {ApiAiClient} from "api-ai-javascript/ApiAiClient"
+import {ApiAiClient} from "api-ai-javascript/ApiAiClient";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {client: new ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0'})};
+    this.state = {
+      listening: false,
+      client: new ApiAiClient({accessToken: 'f44c44a522d54e3491baa0f04b825cf0'})
+    };
+
+    window.recognition;
+    window.accessToken = "f44c44a522d54e3491baa0f04b825cf0";
+    window.baseUrl = "https://api.api.ai/v1/";
   }
   handleAICommand(e) {
     e.preventDefault();
@@ -32,6 +39,60 @@ class App extends Component {
       })
       .catch((error) => {console.log(error)});
   }
+  send() {
+      var text = document.getElementById("help").value;
+      window.$.ajax({
+        type: "POST",
+        url: window.baseUrl + "query?v=20150910",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        headers: {
+          "Authorization": "Bearer " + window.accessToken
+        },
+        data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
+        success: function(data) {
+          this.setResponse(JSON.stringify(data, undefined, 2));
+        }.bind(this),
+        error: function() {
+          this.setResponse("Internal Server Error");
+        }.bind(this)
+      });
+      this.setResponse("Loading...");
+    }
+
+  startRecognition() {
+    window.recognition = new window.webkitSpeechRecognition();
+    window.recognition.onstart = function(event) {
+    };
+    window.recognition.onresult = function(event) {
+      var text = "";
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+          text += event.results[i][0].transcript;
+        }
+        alert(text);
+      this.stopRecognition();
+    };
+
+    window.recognition.lang = "en-US";
+    window.recognition.start();
+  }
+  stopRecognition() {
+      if (window.recognition) {
+        window.recognition.stop();
+        window.recognition = null;
+      }
+      this.send();
+    }
+    setResponse(val) {
+      alert(val);
+    }
+    switchRecognition() {
+      if (window.recognition) {
+        this.stopRecognition();
+      } else {
+        this.startRecognition();
+      }
+    }
 
   render() {
     return (
@@ -39,7 +100,6 @@ class App extends Component {
       
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
-      <script defer src="https://code.getmdl.io/1.3.0/material.min.js" />
         <iframe id="expediaForm" className="main-website" src="https://www.expedia.com">
           <p>Your browser does not support iframes.</p>
         </iframe>
@@ -49,7 +109,7 @@ class App extends Component {
             <input className="mdl-textfield__input" type="text" id="help" />
             <label className="mdl-textfield__label" htmlFor="help">How can I help...</label>
           </div>
-          <i className="material-icons">mic</i>
+          <i onClick={this.switchRecognition.bind(this)} className="material-icons">mic</i>
         </form>
       </div>
     );
