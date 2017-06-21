@@ -19,6 +19,15 @@ class App extends Component {
           case 'fiveStarsHotelsChicago': 
           document.getElementById('expediaForm').src = 'https://www.expedia.com/Hotel-Search?_xpid=11905%7C1#destination=Chicago+(and+vicinity),+Illinois,+United+States+of+America&startDate=07/11/2017&endDate=07/14/2017&adults=1&regionId=178248&star=50&sort=recommended';
           break;
+          case 'navigateThingsToDo':
+          document.getElementById('expediaForm').src = 'https://www.expedia.com/things-to-do/search?location=Miami%2C+Florida&latLong=25.771780%2C-80.190090&rid=178286&regionType=MULTICITY&countryCode=US&startDate=06%2F24%2F2017&endDate=06%2F25%2F2017&_xpid=11905%7C1';
+          break;
+          case 'navigateScratchpad':
+          document.getElementById('expediaForm').src = 'https://www.expedia.com/scratchpad';
+          break;
+          case 'bestPlaceSkiing':
+          document.getElementById('expediaForm').src = 'https://viewfinder.expedia.com/features/9-best-places-ski-around-world';
+          break;
         }
       })
       .catch((error) => {console.log(error)});
